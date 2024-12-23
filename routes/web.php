@@ -8,6 +8,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 Route::post('/api/sensor-histories', [SensorHistoryController::class, 'store'])->withoutMiddleware(VerifyCsrfToken::class);
+Route::get('/api/devices/get', [SensorHistoryController::class, 'getDevices'])->withoutMiddleware(VerifyCsrfToken::class);
 
 Route::get('/', function () {
     return redirect()->route('dashboard');

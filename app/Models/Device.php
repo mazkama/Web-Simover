@@ -20,7 +20,7 @@ class Device extends Model
     protected $fillable = [
         'id',
         'device_name',
-        'location', 
+        'location',
         'status',
     ];
 

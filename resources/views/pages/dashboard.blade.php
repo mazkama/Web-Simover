@@ -3,6 +3,9 @@
 @section('content')
 
 <div class="page-content">
+    <?php
+        $deviceId = $device->id;
+    ?>
 
     <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
         <div>
@@ -35,7 +38,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-6 col-md-12">
-                                    <h3 class="mt-2 fs-2" id="temperature"> <i data-feather="thermometer"></i> 0.00 °C</h3>
+                                    <h3 class="mt-2 fs-2" > <i data-feather="thermometer"></i> <span id="temperature">0.00 °C</span></h3>
                                 </div>
                                 <div class="d-flex align-items-baseline mt-3">
                                     <p class="text-primary">
@@ -55,7 +58,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-6 col-md-12">
-                                    <h3 class="mt-2 fs-2" id="humidity"> <i data-feather="cloud-rain"></i> 0.00 %</h3>
+                                    <h3 class="mt-2 fs-2"> <i data-feather="cloud-rain"></i> <span id="humidity">0.00 %</span> </h3>
                                 </div>
                                 <div class="d-flex align-items-baseline mt-3">
                                     <p class="text-primary">
@@ -75,7 +78,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-6 col-md-12">
-                                    <h3 class="mt-2 fs-2" id="smoke-level"> <i data-feather="wind"></i> 0.00 ppm</h3>
+                                    <h3 class="mt-2 fs-2" > <i data-feather="wind"></i> <span id="smoke-level">0.00 ppm</span> </h3>
                                 </div>
                                 <div class="d-flex align-items-baseline mt-3">
                                     <p class="text-primary">
@@ -95,7 +98,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-6 col-md-12">
-                                    <h3 class="mt-2 fs-2" id="motion"> <i data-feather="activity"></i> -</h3>
+                                    <h3 class="mt-2 fs-2" > <i data-feather="activity"></i> <span id="motion">-</span> </h3>
                                 </div>
                                 <div class="d-flex align-items-baseline mt-3">
                                     <p class="text-primary">
@@ -139,10 +142,10 @@
                             <tbody>
                                 @foreach ($historySensors as $sensor)
                                 <tr>
-                                    <td>26/04/2022 12:12:12</td>
+                                    <td>{{ $sensor->recorded_at ?? '-' }}</td>
                                     <td>{{ $sensor->temperature ?? '-' }} °C</td>
                                     <td>{{ $sensor->humidity ?? '-' }} %</td>
-                                    <td>{{ $sensor->smoke ?? '-' }} %</td>
+                                    <td>{{ $sensor->smoke ?? '-' }} ppm</td>
                                     <td>{{ $sensor->motion === 1 ? 'Terdeteksi' : 'Tidak Terdeteksi' }}</td>
                                 </tr>
                                 @endforeach
@@ -157,7 +160,10 @@
 
 <!-- JavaScript for Fetching Data -->
 <script>
-    const endpointUrl = "https://simover-kominfo-default-rtdb.asia-southeast1.firebasedatabase.app/sensors.json"; // Pastikan menambahkan ".json" pada URL Firebase
+    const deviceId = "{{ $deviceId }}"; // Misalkan device_id adalah 1000000001
+    const endpointUrl = `https://simover-kominfo-default-rtdb.asia-southeast1.firebasedatabase.app/${deviceId}/sensors.json`;
+
+    console.log(endpointUrl);
 
     function fetchData() {
         fetch(endpointUrl)
@@ -188,13 +194,13 @@
         document.getElementById('smoke-level-status').textContent = airQualityStatus;
 
         // Update gerakan
-        const motionStatus = data.motion ? 'Gerakan Terdeteksi' : 'Tidak Ada Gerakan';
+        const motionStatus = data.motion ? 'Ada' : 'Tidak';
         document.getElementById('motion').textContent = motionStatus;
         document.getElementById('motion-status').textContent = motionStatus;
     }
 
     // Fetch data every 10 seconds (10000 ms)
-    setInterval(fetchData, 5000); // Update every 10 seconds
+    setInterval(fetchData, 2000); // Update every 10 seconds
     fetchData(); // Initial fetch when page loads
 </script>
 
