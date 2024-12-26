@@ -56,7 +56,7 @@ class NotificationController extends Controller
         ]);
 
         try {
-            $response = $this->sendNotificationToTopic($topic, $title, $body);
+            $response = $this->sendNotificationToTopic($title, $body);
 
             Log::info('Notification sent successfully.', [
                 'response' => $response,

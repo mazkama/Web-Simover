@@ -185,6 +185,6 @@ class SensorHistoryController extends Controller
     {
         $devices = Device::all();
 
-        return $devices;
+        return  $devices;
     }
 }
