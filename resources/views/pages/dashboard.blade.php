@@ -139,16 +139,7 @@
                                     <th class="pt-0">Gerakan</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach ($historySensors as $sensor)
-                                <tr>
-                                    <td>{{ $sensor->recorded_at ?? '-' }}</td>
-                                    <td>{{ $sensor->temperature ?? '-' }} °C</td>
-                                    <td>{{ $sensor->humidity ?? '-' }} %</td>
-                                    <td>{{ $sensor->smoke ?? '-' }} ppm</td>
-                                    <td>{{ $sensor->motion === 1 ? 'Terdeteksi' : 'Tidak Terdeteksi' }}</td>
-                                </tr>
-                                @endforeach
+                            <tbody id="tableBody">
                             </tbody>
                         </table>
                     </div>
@@ -159,9 +150,46 @@
 </div>
 
 <!-- JavaScript for Fetching Data -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
     const deviceId = "{{ $deviceId }}"; // Misalkan device_id adalah 1000000001
     const endpointUrl = `https://simover-kominfo-default-rtdb.asia-southeast1.firebasedatabase.app/${deviceId}/sensors.json`;
+
+    $(document).ready(function() {
+            function fetchSensorData() {
+                const urlWithDeviceId = `{{ url('/api/sensor-histories/data') }}?device_id=${deviceId}`;
+                $.ajax({
+                    url: urlWithDeviceId, // Sesuaikan dengan endpoint yang sesuai
+                    method: 'GET',
+                    success: function(data) {
+                        let tableBody = '';
+                        data.forEach(function(sensor) {
+                            tableBody += `
+                                <tr>
+                                    <td>${sensor.recorded_at ?? '-'}</td>
+                                    <td>${sensor.temperature ?? '-'}°C</td>
+                                    <td>${sensor.humidity ?? '-'}%</td>
+                                    <td>${sensor.smoke ?? '-'}ppm</td>
+                                    <td>${sensor.motion === 1 ? 'Terdeteksi' : 'Tidak Terdeteksi'}</td>
+                                </tr>
+                            `;
+                        });
+                        $('#tableBody').html(tableBody);
+                    },
+                    error: function(error) {
+                        console.log('Error fetching data:', error);
+                    }
+                });
+            }
+
+            // Fetch data saat halaman dimuat
+            fetchSensorData();
+
+            // Refresh data setiap 5 detik
+            setInterval(fetchSensorData, 5000);
+        });
+
+
 
     console.log(endpointUrl);
 

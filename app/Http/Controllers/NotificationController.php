@@ -14,7 +14,7 @@ class NotificationController extends Controller
     public function __construct()
     {
         $firebase = (new Factory)
-                ->withServiceAccount(base_path('storage/app/service-account_alan.json')) ;
+                ->withServiceAccount(base_path('service-account-simover.json')) ;
         $this->messaging = $firebase->createMessaging();
     }
 
@@ -25,9 +25,7 @@ class NotificationController extends Controller
             'body' => $body,
         ];
 
-        $topic = "fishfeeder";
-
-        $message = CloudMessage::withTarget('topic', $topic)
+        $message = CloudMessage::withTarget('topic', 'simover')
             ->withNotification($notification)
             ->withData($data);
 
