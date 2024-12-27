@@ -18,7 +18,7 @@
                     <span class="link-title">Dashboard</span>
                 </a>
             </li>
-            <li class="nav-item nav-category">Record</li>
+            <li class="nav-item nav-category">Menu</li>
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="collapse" href="#emails" role="button" aria-expanded="false" aria-controls="emails">
                     <i class="link-icon" data-feather="smartphone"></i>
@@ -37,11 +37,20 @@
                 </div>
             </li>
             <li class="nav-item">
-                <a href=" " class="nav-link">
+                <a href="{{ route('riwayat') }}" class="nav-link">
                     <i class="link-icon" data-feather="database"></i>
                     <span class="link-title">Riwayat</span>
                 </a>
             </li>
+            </li>
+            <br>
+            <li class="nav-item">
+                <a href="" class="nav-link">
+                    <i class="link-icon" data-feather="log-out"></i>
+                    <span class="link-title">Keluar</span>
+                </a>
+            </li>
+
         </ul>
     </div>
 </nav>

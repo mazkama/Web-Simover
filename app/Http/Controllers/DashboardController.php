@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
-{ 
+{
 
     public function index(Request $request)
     {
@@ -17,7 +17,7 @@ class DashboardController extends Controller
 
         // Jika tidak ada 'device_id' di URL, arahkan ke perangkat dengan ID tertinggi
         if (!$request->has('device_id') && $devices->isNotEmpty()) {
-            $deviceId = $devices->max('id'); // Ambil device dengan ID terbesar
+            $deviceId = $devices->min('id'); // Ambil device dengan ID terbesar
             return redirect()->route('dashboard', ['device_id' => $deviceId]);
         }
 

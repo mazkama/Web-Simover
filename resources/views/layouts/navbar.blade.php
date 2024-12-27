@@ -3,14 +3,11 @@
     <a href="#" class="sidebar-toggler">
         <i data-feather="menu"></i>
     </a>
-    <div class="navbar-content"> 
+    <div class="navbar-content">
         <ul class="navbar-nav">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i data-feather="bell"></i>
-                    <div class="indicator">
-                        <div class="circle"></div>
-                    </div>
+                    <i data-feather="bell"></i> 
                 </a>
                 <div class="dropdown-menu p-0" aria-labelledby="notificationDropdown">
                     <div class="px-3 py-2 d-flex align-items-center justify-content-between border-bottom">

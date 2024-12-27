@@ -13,9 +13,9 @@ class NotificationController extends Controller
 
     public function __construct()
     {
-        $firebase = (new Factory)
-                ->withServiceAccount(base_path('service-account-simover.json')) ;
-        $this->messaging = $firebase->createMessaging();
+        // $firebase = (new Factory)
+        //         ->withServiceAccount(base_path('service-account-simover.json')) ;
+        // $this->messaging = $firebase->createMessaging();
     }
 
     public function sendNotificationToTopic($title, $body, $data = [])

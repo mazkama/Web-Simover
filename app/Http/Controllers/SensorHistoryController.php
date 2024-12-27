@@ -7,6 +7,7 @@ use App\Http\Controllers\NotificationController;
 use App\Models\SensorHistory;
 use App\Models\Device;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -20,13 +21,92 @@ class SensorHistoryController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     protected $NotificationController;
+    protected $NotificationController;
 
-     public function __construct(NotificationController $NotificationController)
-     {
-         $this->NotificationController = $NotificationController;
-     }
+    public function __construct(NotificationController $NotificationController)
+    {
+        $this->NotificationController = $NotificationController;
+    }
 
+    public function index(Request $request)
+    {
+        $today = Carbon::today()->format('Y-m-d');
+
+        // Ambil filter dari request atau gunakan nilai default
+        $start_date = $request->input('start_date', $today);
+        $end_date = $request->input('end_date', $today);
+        $device_id = $request->input('device_id');
+
+        // Query data berdasarkan filter
+        $query = SensorHistory::query();
+
+        if ($start_date && $end_date) {
+            $query->whereBetween('recorded_at', [$start_date . ' 00:00:00', $end_date . ' 23:59:59']);
+        }
+
+        if ($device_id) {
+            $query->where('device_id', $device_id);
+        }
+
+        $sensorHistory = $query->get();
+        $devices = Device::all(); 
+
+
+        return view('pages.riwayat', compact('sensorHistory', 'devices', 'start_date', 'end_date', 'device_id'));
+    }
+
+    // public function index(Request $request)
+    // {
+    //     $devices = Device::all();
+
+    //     // Filter data by selected device if applicable
+    //     $query = SensorHistory::with('device');
+
+    //     if ($request->device_id) {
+    //         $query->where('device_id', $request->device_id);
+    //     }
+
+    //     $sensorHistory = $query->latest('recorded_at')->get();
+
+    //     return view('pages.riwayat', compact('sensorHistory', 'devices'));
+    // }
+
+    // public function index(Request $request)
+    // {
+    //     $devices = Device::all();
+
+    //     // Filter data by selected device if applicable
+    //     $query = SensorHistory::with('device');
+
+    //     // Filter berdasarkan device
+    //     if ($request->has('device_id') && $request->device_id !== 'all') {
+    //         $query->where('device_id', $request->device_id);
+    //     }
+
+    //     // Filter berdasarkan rentang waktu
+    //     $timeRange = $request->get('time_range', 'all');
+    //     $currentDate = SupportCarbon::now();
+
+    //     if ($timeRange == 'today') {
+    //         $query->whereDate('recorded_at', $currentDate->toDateString());
+    //     } elseif ($timeRange == 'week') {
+    //         $query->whereBetween('recorded_at', [
+    //             $currentDate->startOfWeek()->toDateString(),
+    //             $currentDate->endOfWeek()->toDateString(),
+    //         ]);
+    //     } elseif ($timeRange == 'month') {
+    //         $query->whereMonth('recorded_at', $currentDate->month)
+    //               ->whereYear('recorded_at', $currentDate->year);
+    //     } elseif ($timeRange == 'year') {
+    //         $query->whereYear('recorded_at', $currentDate->year);
+    //     }
+
+    //     // Ambil hasil query
+    //     $sensorHistory = $query->get();
+
+    //     // Kembalikan view dengan data yang sudah difilter
+    //     return view('pages.riwayat', compact('sensorHistory', 'devices'));
+    // }
 
     public function store(Request $request)
     {
@@ -180,11 +260,4 @@ class SensorHistoryController extends Controller
     //         'message' => 'Data sensor tidak ditemukan.'
     //     ], 404);
     // }
-
-    public function getDevices()
-    {
-        $devices = Device::all();
-
-        return  $devices;
-    }
 }
