@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Dashboard')
+@section('title','Riwayat')
 @section('content')
 
 <div class="page-content">
@@ -19,13 +19,13 @@
                     <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
                         <div>
                             <h5 class="mb-3 mb-md-2">Data Riwayat Sensor</h5>
-                            <p class="text-muted mb-3">Riwayat Sensor dari beberapa waktu terakhir.</p>
+                            <p class="text-muted mb-3">Riwayat Sensor dari perangkat beberapa waktu terakhir.</p>
                         </div>
                         <div>
-                            <form action="{{ route('riwayat') }}" method="GET">
+                            <form action="{{ route('sensorHistory.index') }}" method="GET">
                                 <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="input-group flatpickr wd-200 me-2 mb-2 mb-md-0" id="startDatePicker">
+                                    <div class="col-md-3">
+                                        <div class="input-group flatpickr wd-150 me-2 mb-2 mb-md-0" id="startDatePicker">
                                             <span class="input-group-text input-group-addon bg-transparent border-primary" data-toggle>
                                                 <i data-feather="calendar" class="text-primary"></i>
                                             </span>
@@ -35,7 +35,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="input-group flatpickr wd-200 me-2 mb-2 mb-md-0" id="endDatePicker">
+                                        <div class="input-group flatpickr wd-150 me-2 mb-2 mb-md-0" id="endDatePicker">
                                             <span class="input-group-text input-group-addon bg-transparent border-primary" data-toggle>
                                                 <i data-feather="calendar" class="text-primary"></i>
                                             </span>
@@ -44,7 +44,7 @@
                                                 value="{{ request('end_date', $end_date) }}">
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-5">
                                         <div class="input-group">
                                             <select class="form-select" name="device_id">
                                                 <option value="">Semua Perangkat</option>

@@ -28,7 +28,7 @@
                 <div class="collapse" id="emails">
                     <ul class="nav sub-menu">
                         <li class="nav-item">
-                            <a href="pages/email/inbox.html" class="nav-link">Semua Perangkat</a>
+                            <a href="{{ route('device.index') }}" class="nav-link">Semua Perangkat</a>
                         </li>
                         <li class="nav-item">
                             <a href="pages/email/read.html" class="nav-link">Tambah Perangkat</a>
@@ -37,7 +37,7 @@
                 </div>
             </li>
             <li class="nav-item">
-                <a href="{{ route('riwayat') }}" class="nav-link">
+                <a href="{{ route('sensorHistory.index') }}" class="nav-link">
                     <i class="link-icon" data-feather="database"></i>
                     <span class="link-title">Riwayat</span>
                 </a>
@@ -49,8 +49,7 @@
                     <i class="link-icon" data-feather="log-out"></i>
                     <span class="link-title">Keluar</span>
                 </a>
-            </li>
-
+            </li> 
         </ul>
     </div>
 </nav>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DeviceController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SensorHistoryController;
 use App\Http\Controllers\NotificationController;
@@ -25,7 +26,9 @@ Route::get('/', function () {
 # Route Dashboard
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 # Route History
-Route::get('/riwayat', [SensorHistoryController::class, 'index'])->name('riwayat');
+Route::get('/riwayat', [SensorHistoryController::class, 'index'])->name('sensorHistory.index');
+# Route Device
+Route::get('/perangkat', [DeviceController::class, 'index'])->name('device.index');
 
 
 

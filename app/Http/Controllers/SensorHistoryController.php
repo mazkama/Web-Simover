@@ -49,10 +49,10 @@ class SensorHistoryController extends Controller
         }
 
         $sensorHistory = $query->get();
-        $devices = Device::all(); 
+        $devices = Device::all();
 
 
-        return view('pages.riwayat', compact('sensorHistory', 'devices', 'start_date', 'end_date', 'device_id'));
+        return view('pages.sensorHistory.index', compact('sensorHistory', 'devices', 'start_date', 'end_date', 'device_id'));
     }
 
     // public function index(Request $request)
