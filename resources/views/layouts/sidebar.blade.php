@@ -20,22 +20,23 @@
             </li>
             <li class="nav-item nav-category">Menu</li>
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="collapse" href="#emails" role="button" aria-expanded="false" aria-controls="emails">
+                <a class="nav-link {{ Request::is('perangkat*') ? 'active' : '' }}" data-bs-toggle="collapse" href="#emails" role="button" aria-expanded="false" aria-controls="emails">
                     <i class="link-icon" data-feather="smartphone"></i>
                     <span class="link-title">Perangkat</span>
                     <i class="link-arrow" data-feather="chevron-down"></i>
                 </a>
-                <div class="collapse" id="emails">
+                <div class="collapse {{ Request::is('perangkat*') ? 'show' : '' }}" id="emails">
                     <ul class="nav sub-menu">
                         <li class="nav-item">
-                            <a href="{{ route('device.index') }}" class="nav-link">Semua Perangkat</a>
+                            <a href="{{ route('device.index') }}" class="nav-link {{ Route::is('device.index') ? 'active' : '' }}">Semua Perangkat</a>
                         </li>
                         <li class="nav-item">
-                            <a href="pages/email/read.html" class="nav-link">Tambah Perangkat</a>
+                            <a href="{{ route('device.create') }}" class="nav-link {{ Route::is('device.create') ? 'active' : '' }}">Tambah Perangkat</a>
                         </li>
                     </ul>
                 </div>
             </li>
+
             <li class="nav-item">
                 <a href="{{ route('sensorHistory.index') }}" class="nav-link">
                     <i class="link-icon" data-feather="database"></i>
@@ -49,7 +50,7 @@
                     <i class="link-icon" data-feather="log-out"></i>
                     <span class="link-title">Keluar</span>
                 </a>
-            </li> 
+            </li>
         </ul>
     </div>
 </nav>

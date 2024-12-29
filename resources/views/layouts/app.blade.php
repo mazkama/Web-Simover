@@ -25,6 +25,7 @@
     <!-- endinject -->
 
     <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="{{ asset('assets/vendors/jquery-steps/jquery.steps.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendors/select2/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendors/datatables.net-bs5/dataTables.bootstrap5.css') }}">
     <!-- End plugin css for this page -->
@@ -82,6 +83,7 @@
     <!-- End plugin js for this page -->
 
     <!-- Plugin js for this page -->
+    <script src="{{ asset('assets/vendors/jquery-steps/jquery.steps.min.js') }}"></script>
     <script src="{{ asset('assets/vendors/flatpickr/flatpickr.min.js') }}"></script>
     <script src="{{ asset('assets/vendors/apexcharts/apexcharts.min.js') }}"></script>
     <script src="../../../assets/vendors/select2/select2.min.js"></script>
@@ -103,6 +105,7 @@
     <!-- End custom js for this page -->
 
     <!-- Custom js for this page -->
+    <script src="{{ asset('assets/js/wizard.js')}}"></script>
     <script src="{{ asset('assets/js/apexcharts-light.js') }}"></script>
     <script src="{{ asset('assets/js/select2.js') }}"></script>
     <!-- End custom js for this page -->

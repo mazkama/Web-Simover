@@ -28,7 +28,14 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 # Route History
 Route::get('/riwayat', [SensorHistoryController::class, 'index'])->name('sensorHistory.index');
 # Route Device
-Route::get('/perangkat', [DeviceController::class, 'index'])->name('device.index');
+Route::get('/perangkat/semua', [DeviceController::class, 'index'])->name('device.index');
+Route::post('/perangkat/cek', [DeviceController::class, 'checkDeviceId'])->name('device.cek');
+Route::get('/perangkat/tambah', [DeviceController::class, 'create'])->name('device.create');
+Route::post('/perangkat/tambah', [DeviceController::class, 'store'])->name('device.store');
+Route::delete('/perangkat/delete/{id}', [DeviceController::class, 'delete'])->name('device.delete');
+Route::get('/perangkat/ubah/{id}', [DeviceController::class, 'edit'])->name('device.edit');
+Route::put('/perangkat/update/{id}', [DeviceController::class, 'update'])->name('device.update');
+
 
 
 

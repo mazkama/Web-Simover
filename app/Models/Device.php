@@ -13,6 +13,9 @@ class Device extends Model
      * Table associated with the model.
      */
     protected $table = 'devices';
+    protected $primaryKey = 'id'; // Pastikan kolom 'id' sebagai primary key
+    public $incrementing = false; // Nonaktifkan auto-increment
+    protected $keyType = 'string'; // Jika `id` berupa string, gunakan 'string', jika integer tetap 'int'
 
     /**
      * The attributes that are mass assignable.
@@ -32,5 +35,11 @@ class Device extends Model
     public function sensorHistories()
     {
         return $this->hasMany(SensorHistory::class);
+    }
+
+    // Relasi ke sensor terakhir
+    public function latestSensorHistory()
+    {
+        return $this->hasOne(SensorHistory::class, 'device_id')->latest('recorded_at');
     }
 }
