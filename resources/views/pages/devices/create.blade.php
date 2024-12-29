@@ -20,7 +20,7 @@
                         <div class="card-body">
 
                             <h5 class="mb-3 mb-md-2">Tambah Perangkat</h5>
-                            <p class="text-muted mb-5">Tambah perangkat yang terhubung untuk proses monitoring dan penyimpanan riwayat.</p>
+                            <p class="text-muted mb-4">Tambah perangkat yang terhubung untuk proses monitoring dan penyimpanan riwayat.</p>
 
                             <div class="mb-3">
                                 <label for="device_id" class="form-label me-2">ID Perangkat</label>
@@ -37,13 +37,13 @@
                             </div>
 
                             <div id="additional-fields" style="display: none;">
-                                <div class="mb-3">
+                                <div class="mb-5">
                                     <label for="device_name" class="form-label">Nama Perangkat</label>
                                     <input type="text" id="device_name" name="device_name" placeholder="Nama Perangkat" class="form-control">
                                 </div>
                             </div>
 
-                            <button type="submit" id="submit-btn" class="btn btn-primary" style="display: none;">Submit</button>
+                            <button type="submit" id="submit-btn" class="btn btn-primary" style="display: none;">Simpan</button>
                         </div>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                         <div class="card-body">
 
                             <h5 class="mb-3 mb-md-2">Batas Sensor</h5>
-                            <p class="text-muted mb-5">Tambahkan batasan yang akan digunakan untuk memberikan notifikasi peringatan.</p>
+                            <p class="text-muted mb-4">Tambahkan batasan yang akan digunakan untuk memberikan notifikasi peringatan.</p>
 
                             <div class="mb-3">
                                 <label for="sensor_temp" class="form-label">Sensor Suhu</label>

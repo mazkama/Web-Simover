@@ -7,6 +7,8 @@ use App\Models\Device;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
+use function PHPUnit\Framework\isEmpty;
+
 class DashboardController extends Controller
 {
 
@@ -14,6 +16,10 @@ class DashboardController extends Controller
     {
         // Ambil daftar perangkat
         $devices = Device::all();
+
+        if ($devices->isEmpty()) {
+            return redirect()->route('device.create');
+        }
 
         // Jika tidak ada 'device_id' di URL, arahkan ke perangkat dengan ID tertinggi
         if (!$request->has('device_id') && $devices->isNotEmpty()) {

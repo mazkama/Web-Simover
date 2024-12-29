@@ -48,7 +48,13 @@
 
 <body>
     <div class="main-wrapper">
+        @if(!session('user_name'))
 
+        <!-- Content -->
+        @yield('content')
+        <!-- End Content -->
+
+        @else
         <!-- sidebar -->
         @include('layouts.sidebar')
         <!-- end sidebar -->
@@ -70,7 +76,9 @@
             </footer>
             <!-- partial -->
 
+
         </div>
+            @endif
     </div>
 
     <!-- core:js -->

@@ -30,6 +30,12 @@ class SensorHistoryController extends Controller
 
     public function index(Request $request)
     {
+        $devices = Device::all();
+
+        if ($devices->isEmpty()) {
+            return redirect()->route('device.create');
+        }
+
         $today = Carbon::today()->format('Y-m-d');
 
         // Ambil filter dari request atau gunakan nilai default
@@ -49,7 +55,6 @@ class SensorHistoryController extends Controller
         }
 
         $sensorHistory = $query->get();
-        $devices = Device::all();
 
 
         return view('pages.sensorHistory.index', compact('sensorHistory', 'devices', 'start_date', 'end_date', 'device_id'));
@@ -166,7 +171,7 @@ class SensorHistoryController extends Controller
         ];
 
         // Kirim data ke Firebase menggunakan HTTP Client Laravel
-        $response = Http::put('https://simover-kominfo-default-rtdb.asia-southeast1.firebasedatabase.app/' . $data->device_id . '/sensors.json', $dataSensor);
+        $response = Http::patch('https://simover-kominfo-default-rtdb.asia-southeast1.firebasedatabase.app/' . $data->device_id . '/sensors.json', $dataSensor);
         //$response = Http::put('https://simover-kominfo-default-rtdb.asia-southeast1.firebasedatabase.app/1000000001', $dataSensor);
 
         if ($response->successful()) {

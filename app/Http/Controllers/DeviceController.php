@@ -14,29 +14,16 @@ class DeviceController extends Controller
     {
         $devices = Device::with('latestSensorHistory')->get();
 
+        if ($devices->isEmpty()) {
+            return redirect()->route('device.create');
+        }
+
         return view('pages.devices.index', compact('devices'));
     }
 
     public function create()
     {
         return view('pages.devices.create');
-    }
-
-    public function checkDeviceId(Request $request)
-    {
-        $deviceId = $request->input('device_id');
-        $firebaseUrl = "https://simover-kominfo-default-rtdb.asia-southeast1.firebasedatabase.app/.json";
-
-        // Fetch data from Firebase
-        $response = Http::get($firebaseUrl);
-        $devices = $response->json();
-
-        // Check if the device ID exists in Firebase
-        if (isset($devices[$deviceId])) {
-            return response()->json(['exists' => true]);
-        }
-
-        return response()->json(['exists' => false]);
     }
 
     // public function checkDeviceId(Request $request)
@@ -46,20 +33,37 @@ class DeviceController extends Controller
 
     //     // Fetch data from Firebase
     //     $response = Http::get($firebaseUrl);
-
-    //     if ($response->failed()) {
-    //         return response()->json(['exists' => false, 'message' => 'Failed to fetch data from Firebase'], 500);
-    //     }
-
     //     $devices = $response->json();
 
-    //     // Check if the device ID exists in Firebase and not in MySQL
-    //     if (isset($devices[$deviceId]) && !Device::where('id', $deviceId)->exists()) {
+    //     // Check if the device ID exists in Firebase
+    //     if (isset($devices[$deviceId])) {
     //         return response()->json(['exists' => true]);
     //     }
 
     //     return response()->json(['exists' => false]);
     // }
+
+    public function checkDeviceId(Request $request)
+    {
+        $deviceId = $request->input('device_id');
+        $firebaseUrl = "https://simover-kominfo-default-rtdb.asia-southeast1.firebasedatabase.app/.json";
+
+        // Fetch data from Firebase
+        $response = Http::get($firebaseUrl);
+
+        if ($response->failed()) {
+            return response()->json(['exists' => false, 'message' => 'Failed to fetch data from Firebase'], 500);
+        }
+
+        $devices = $response->json();
+
+        // Check if the device ID exists in Firebase and not in MySQL
+        if (isset($devices[$deviceId]) && !Device::where('id', $deviceId)->exists()) {
+            return response()->json(['exists' => true]);
+        }
+
+        return response()->json(['exists' => false]);
+    }
 
     public function store(Request $request)
     {

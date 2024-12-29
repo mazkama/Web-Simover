@@ -7,7 +7,7 @@
         <ul class="navbar-nav">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i data-feather="bell"></i> 
+                    <i data-feather="bell"></i>
                 </a>
                 <div class="dropdown-menu p-0" aria-labelledby="notificationDropdown">
                     <div class="px-3 py-2 d-flex align-items-center justify-content-between border-bottom">
@@ -76,8 +76,10 @@
                             <img class="wd-80 ht-80 rounded-circle" src="https://via.placeholder.com/80x80" alt="">
                         </div>
                         <div class="text-center">
-                            <p class="tx-16 fw-bolder">Amiah Burton</p>
-                            <p class="tx-12 text-muted">amiahburton@gmail.com</p>
+                            @if (session('user_name')) 
+                            <p class="tx-16 fw-bolder">{{ session('user_name') }}</p>
+                            <p class="tx-12 text-muted">{{ session('user_email') }}</p>
+                            @endif
                         </div>
                     </div>
                     <ul class="list-unstyled p-1">

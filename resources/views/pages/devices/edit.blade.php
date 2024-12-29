@@ -21,19 +21,20 @@
                         <div class="card-body">
 
                             <h5 class="mb-3 mb-md-2">Ubah Perangkat</h5>
-                            <p class="text-muted mb-5">Ubah perangkat yang terhubung untuk proses monitoring dan penyimpanan riwayat.</p>
+                            <p class="text-muted mb-4">Ubah perangkat yang terhubung untuk proses monitoring dan penyimpanan riwayat.</p>
 
                             <div class="mb-3">
                                 <label for="device_id" class="form-label me-2">ID Perangkat</label>
                                 <input type="number" id="device_id" name="device_id" class="form-control" placeholder="Id Perangkat" readonly value="{{ $device->id }}">
                             </div>
 
-                            <div class="mb-3">
+                            <div class="mb-5">
                                 <label for="device_name" class="form-label">Nama Perangkat</label>
                                 <input type="text" id="device_name" name="device_name" placeholder="Nama Perangkat" class="form-control" value="{{ $device->device_name }}">
                             </div>
 
-                            <button type="submit" id="submit-btn" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                            <a href="{{ route('device.index') }}" class="btn btn-secondary">Batal</a>
                         </div>
                     </div>
                 </div>
@@ -43,7 +44,7 @@
                         <div class="card-body">
 
                             <h5 class="mb-3 mb-md-2">Batas Sensor</h5>
-                            <p class="text-muted mb-5">Tambahkan batasan yang akan digunakan untuk memberikan notifikasi peringatan.</p>
+                            <p class="text-muted mb-4">Tambahkan batasan yang akan digunakan untuk memberikan notifikasi peringatan.</p>
 
                             <div class="mb-3">
                                 <label for="sensor_temp" class="form-label">Sensor Suhu</label>

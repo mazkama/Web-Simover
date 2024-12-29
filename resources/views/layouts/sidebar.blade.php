@@ -28,7 +28,7 @@
                 <div class="collapse {{ Request::is('perangkat*') ? 'show' : '' }}" id="emails">
                     <ul class="nav sub-menu">
                         <li class="nav-item">
-                            <a href="{{ route('device.index') }}" class="nav-link {{ Route::is('device.index') ? 'active' : '' }}">Semua Perangkat</a>
+                            <a href="{{ route('device.index') }}" class="nav-link {{ Route::is('device.index','device.edit') ? 'active' : '' }}">Semua Perangkat</a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('device.create') }}" class="nav-link {{ Route::is('device.create') ? 'active' : '' }}">Tambah Perangkat</a>
@@ -46,11 +46,16 @@
             </li>
             <br>
             <li class="nav-item">
-                <a href="" class="nav-link">
-                    <i class="link-icon" data-feather="log-out"></i>
-                    <span class="link-title">Keluar</span>
-                </a>
+                <!-- Form Logout -->
+                <form action="{{ route('firebase.logout') }}" method="POST" style="display: inline;">
+                    @csrf
+                    <button type="submit" class="btn btn-link nav-link" style="padding: 0; text-decoration: none;">
+                        <i class="link-icon" data-feather="log-out"></i>
+                        <span class="link-title">Keluar</span>
+                    </button>
+                </form>
             </li>
+
         </ul>
     </div>
 </nav>
