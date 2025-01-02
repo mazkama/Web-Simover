@@ -149,7 +149,6 @@ class DeviceController extends Controller
             $device->update([
                 'device_name' => $request->input('device_name'),
             ]);
-
         } else {
             return response()->json([
                 'success' => false,
@@ -164,19 +163,24 @@ class DeviceController extends Controller
 
     public function delete($id)
     {
-        // Cari perangkat berdasarkan ID
         $device = Device::find($id);
 
-        // Cek apakah perangkat ditemukan
-        if ($device) {
-            // Hapus perangkat
+        if (!$device) {
+            // Jika perangkat tidak ditemukan, redirect dengan pesan error
+            return redirect()->route('device.index')->with('error', 'Perangkat tidak ditemukan!');
+        }
+
+        $response = Http::delete('https://simover-kominfo-default-rtdb.asia-southeast1.firebasedatabase.app/' . $id . '/.json');
+
+        if ($response->successful()) {
             $device->delete();
 
             // Redirect dengan pesan sukses
             return redirect()->route('device.index')->with('success', 'Perangkat berhasil dihapus!');
+        } else {
+            
+            // Redirect dengan pesan gagal
+            return redirect()->route('device.index')->with('error', 'Gagal Menghapus perangkat!');
         }
-
-        // Jika perangkat tidak ditemukan, redirect dengan pesan error
-        return redirect()->route('device.index')->with('error', 'Perangkat tidak ditemukan!');
     }
 }

@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SensorHistory;
 use App\Models\Device;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-
-use function PHPUnit\Framework\isEmpty;
+use Illuminate\Support\Facades\Log; 
 
 class DashboardController extends Controller
 {
@@ -43,6 +41,8 @@ class DashboardController extends Controller
             } else {
                 // Jika perangkat tidak ditemukan
                 Log::warning('Perangkat dengan ID ' . $request->device_id . ' tidak ditemukan.');
+                $deviceId = $devices->min('id'); // Ambil device dengan ID terbesar
+                return redirect()->route('dashboard', ['device_id' => $deviceId]);
             }
         }
 

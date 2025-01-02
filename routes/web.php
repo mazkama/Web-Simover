@@ -7,30 +7,33 @@ use App\Http\Controllers\SensorHistoryController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Api\DeviceController as ApiDeviceController;
 
-// Authentication routes for login and registration
-Route::get('login', function () {
-    if (session('user_name'))
-        return redirect()->route('dashboard');
-    else
-        return view('auth.login');
-})->name('login');
+Route::middleware(['guest'])->group(function () {
+    // Authentication routes for login and registration
+    Route::get('login', function () {
+        if (session('user_name'))
+            return redirect()->route('dashboard');
+        else
+            return view('auth.login');
+    })->name('login');
 
-Route::get('register', function () {
-    if (session('user_name'))
-        return redirect()->route('dashboard');
-    else
-        return view('auth.register');
-})->name('register');
+    Route::get('register', function () {
+        if (session('user_name'))
+            return redirect()->route('dashboard');
+        else
+            return view('auth.register');
+    })->name('register');
 
-// Firebase Authentication handling
-Route::post('register', [AuthController::class, 'register'])->name('firebase.register');
-Route::post('login', [AuthController::class, 'login'])->name('firebase.login');
-Route::post('logout', [AuthController::class, 'logout'])->name('firebase.logout');
+    // Firebase Authentication handling
+    Route::post('register', [AuthController::class, 'register'])->name('firebase.register');
+    Route::post('login', [AuthController::class, 'login'])->name('firebase.login');
+    Route::post('logout', [AuthController::class, 'logout'])->name('firebase.logout');
 
-// Resend Email Verification
-Route::view('/resend-verification', 'auth.resend-verification')->name('resend-verification.index');
-Route::post('/resend-verification', [AuthController::class, 'resendEmailVerification'])->name('resend-verification.store');
+    // Resend Email Verification
+    Route::view('/resend-verification', 'auth.resend-verification')->name('resend-verification.index');
+    Route::post('/resend-verification', [AuthController::class, 'resendEmailVerification'])->name('resend-verification.store');
+});
 
 Route::middleware(['firebase.auth'])->group(function () {
     // If the user is authenticated, redirect to dashboard if they access the root URL
@@ -54,8 +57,6 @@ Route::middleware(['firebase.auth'])->group(function () {
     Route::put('/perangkat/update/{id}', [DeviceController::class, 'update'])->name('device.update');
 });
 
-
-
 ####  Route Api ####
 Route::prefix('api')->withoutMiddleware(VerifyCsrfToken::class)->group(function () {
     # Route Api FCM
@@ -63,14 +64,6 @@ Route::prefix('api')->withoutMiddleware(VerifyCsrfToken::class)->group(function 
     # Route Api History Sensor
     Route::post('/sensor-histories', [SensorHistoryController::class, 'store']);
     Route::get('/sensor-histories/data', [SensorHistoryController::class, 'getData'])->name('dataSensor');
+    # Route Api Devices
+    Route::apiResource('devices', ApiDeviceController::class);
 });
-
-
-
-
-
-
-
-// Route::get('/dashboard', function () {
-//     return view('pages.dashboard');
-// })->name('dashboard');

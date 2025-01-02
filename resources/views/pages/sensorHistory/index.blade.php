@@ -14,7 +14,7 @@
     <div class="row">
         <div class="col-md-12 grid-margin stretch-card">
             <div class="card">
-                <div class="card-body"> 
+                <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
                         <div>
                             <h5 class="mb-3 mb-md-2">Data Riwayat Sensor</h5>
@@ -22,30 +22,38 @@
                         </div>
                         <div>
                             <form action="{{ route('sensorHistory.index') }}" method="GET">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="input-group flatpickr wd-150 me-2 mb-2 mb-md-0" id="startDatePicker">
-                                            <span class="input-group-text input-group-addon bg-transparent border-primary" data-toggle>
+                                <div class="row align-items-center">
+                                    <!-- Start Date Picker -->
+                                    <div class="col-md-4 mb-3">
+                                        <label for="startDatePicker" class="form-label">Tanggal Awal</label>
+                                        <div class="input-group flatpickr" id="startDatePicker">
+                                            <span class="input-group-text input-group-addon bg-transparent border-primary">
                                                 <i data-feather="calendar" class="text-primary"></i>
                                             </span>
                                             <input type="text" name="start_date" class="form-control bg-transparent border-primary"
-                                                placeholder="Tanggal Awal" data-input
+                                                placeholder="Pilih Tanggal Awal" data-input
                                                 value="{{ request('start_date', $start_date) }}">
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="input-group flatpickr wd-150 me-2 mb-2 mb-md-0" id="endDatePicker">
-                                            <span class="input-group-text input-group-addon bg-transparent border-primary" data-toggle>
+
+                                    <!-- End Date Picker -->
+                                    <div class="col-md-4 mb-3">
+                                        <label for="endDatePicker" class="form-label">Tanggal Akhir</label>
+                                        <div class="input-group flatpickr" id="endDatePicker">
+                                            <span class="input-group-text input-group-addon bg-transparent border-primary">
                                                 <i data-feather="calendar" class="text-primary"></i>
                                             </span>
                                             <input type="text" name="end_date" class="form-control bg-transparent border-primary"
-                                                placeholder="Tanggal Akhir" data-input
+                                                placeholder="Pilih Tanggal Akhir" data-input
                                                 value="{{ request('end_date', $end_date) }}">
                                         </div>
                                     </div>
-                                    <div class="col-md-5">
+
+                                    <!-- Device Selector -->
+                                    <div class="col-md-4 mb-3">
+                                        <label for="deviceSelector" class="form-label">Perangkat</label>
                                         <div class="input-group">
-                                            <select class="form-select" name="device_id">
+                                            <select class="form-select" name="device_id" id="deviceSelector">
                                                 <option value="">Semua Perangkat</option>
                                                 @foreach($devices as $device)
                                                 <option value="{{ $device->id }}" {{ request('device_id') == $device->id ? 'selected' : '' }}>
@@ -59,6 +67,7 @@
                                 </div>
                             </form>
                         </div>
+
 
                     </div>
 

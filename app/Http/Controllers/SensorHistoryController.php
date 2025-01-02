@@ -117,18 +117,34 @@ class SensorHistoryController extends Controller
     {
         // Validasi data yang diterima
         $validator = Validator::make($request->all(), [
-            'device_id' => 'required|exists:devices,id',
+            'device_id' => 'required',
             'temperature' => 'nullable|numeric',
             'humidity' => 'nullable|numeric',
             'smoke' => 'nullable|numeric',
             'motion' => 'nullable|boolean',
         ]);
+
+        // Log data request
         Log::info('data history perangkat', [
             'request_data' => $request->all(),
         ]);
 
+        // Cek apakah device_id ada di tabel devices
+        $deviceExists = Device::find($request->device_id);
+
+        // Jika device_id tidak ada, hanya jalankan sendFirebase
+        if (!$deviceExists) {
+            $this->sendFirebase($request);
+            return response()->json([
+                'success' => true,
+                'message' => 'Device tidak ditemukan, namun data berhasil dikirim',
+            ], 200);
+        }
+
+
         $this->sendFirebase($request);
 
+        // Jika validator gagal
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
@@ -137,7 +153,7 @@ class SensorHistoryController extends Controller
             ], 400);
         }
 
-        //cek threshold
+        // Cek threshold sensor
         $this->cekThresholdSensor($request);
 
         // Simpan data ke dalam sensor_histories
@@ -156,6 +172,7 @@ class SensorHistoryController extends Controller
             'data' => $sensorHistory,
         ], 200);
     }
+
 
     public function sendFirebase($data)
     {

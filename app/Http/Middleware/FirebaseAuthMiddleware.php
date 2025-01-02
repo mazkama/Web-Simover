@@ -1,10 +1,12 @@
 <?php
+
 namespace App\Http\Middleware;
 
 use Closure;
 use Kreait\Firebase\Auth as FirebaseAuth;
 use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Kreait\Laravel\Firebase\Facades\Firebase;
 
 class FirebaseAuthMiddleware
@@ -25,26 +27,38 @@ class FirebaseAuthMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        // Check if the Firebase token is stored in the session
+
+        // Periksa apakah token Firebase ada di session
         $firebaseToken = session('firebase_token');
+        // Log::info('Current route: ' . $request->path());
+        // Log::info('Firebase token: ' . $firebaseToken);
 
         if (!$firebaseToken) {
-            // No token found in session, return unauthorized
-            return redirect()->route('login');
+            // Jika token tidak ditemukan, periksa apakah permintaan adalah AJAX
+            if ($request->ajax() || $request->expectsJson()) {
+                return response()->json(['message' => 'Unauthorized'], 401);
+            }
+
+            // Untuk permintaan biasa, arahkan ke halaman login
+            return redirect()->route('login')->with('error', 'Session has expired. Please login again.');
         }
 
         try {
-            // Verify the token using Firebase Auth
+            // Verifikasi token menggunakan Firebase Auth
             $verifiedIdToken = $this->auth->verifyIdToken($firebaseToken);
 
-            // Attach the Firebase user to the request if token is valid
+            // Tambahkan pengguna Firebase ke atribut permintaan
             $request->attributes->add(['firebase_user' => $verifiedIdToken]);
-
         } catch (FailedToVerifyToken $e) {
-            // Token invalid or expired
-            return response()->json(['error' => 'Invalid or expired token'], 401);
+            // Token tidak valid atau kedaluwarsa
+            if ($request->ajax() || $request->expectsJson()) {
+                return response()->json(['message' => 'Unauthorized'], 401);
+            }
+
+            return redirect()->route('login')->with('error', 'Invalid or expired session. Please login again.');
         }
 
-        return $next($request); // Continue the requesta
+        // Lanjutkan permintaan
+        return $next($request);
     }
 }

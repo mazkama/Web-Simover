@@ -18,6 +18,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
     <!-- End fonts -->
 
     <!-- core:css -->
@@ -48,13 +49,6 @@
 
 <body>
     <div class="main-wrapper">
-        @if(!session('user_name'))
-
-        <!-- Content -->
-        @yield('content')
-        <!-- End Content -->
-
-        @else
         <!-- sidebar -->
         @include('layouts.sidebar')
         <!-- end sidebar -->
@@ -76,9 +70,7 @@
             </footer>
             <!-- partial -->
 
-
         </div>
-            @endif
     </div>
 
     <!-- core:js -->

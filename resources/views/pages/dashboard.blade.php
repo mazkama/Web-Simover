@@ -3,10 +3,6 @@
 @section('content')
 
 <div class="page-content">
-    <?php
-        $deviceId = $device->id;
-    ?>
-
     <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
         <div>
             <h4 class="mb-3 mb-md-0">Dashboard {{ $device->device_name }}</h4>
@@ -17,9 +13,9 @@
                     Perangkat
                 </button>
                 <div class="dropdown-menu overflow-auto" style="max-height: 200px;" aria-labelledby="dropdownMenuButton1">
-                    @foreach ($devices as $device)
-                    <a class="dropdown-item {{ request('device_id') == $device->id ? 'active' : '' }}" href="{{ route('dashboard', ['device_id' => $device->id]) }}">
-                        {{ $device->device_name }}
+                    @foreach ($devices as $deviceOption)
+                    <a class="dropdown-item {{ request('device_id') == $deviceOption->id ? 'active' : '' }}" href="{{ route('dashboard', ['device_id' => $deviceOption->id]) }}">
+                        {{ $deviceOption->device_name }}
                     </a>
                     @endforeach
                 </div>
@@ -28,92 +24,22 @@
     </div>
 
     <div class="row">
-        <div class="col-12 col-xl-12 stretch-card">
-            <div class="row flex-grow-1">
-                <div class="col-md-3 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body bg">
-                            <div class="d-flex justify-content-between align-items-baseline">
-                                <h6 class="card-title mb-0">Suhu</h6>
-                            </div>
-                            <div class="row">
-                                <div class="col-6 col-md-12">
-                                    <h3 class="mt-2 fs-2" > <i data-feather="thermometer"></i> <span id="temperature">0.00 °C</span></h3>
-                                </div>
-                                <div class="d-flex align-items-baseline mt-3">
-                                    <p class="text-primary">
-                                        <span id="temperature-status">Kondisi Aman</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-baseline">
-                                <h6 class="card-title mb-0">Kelembapan</h6>
-                            </div>
-                            <div class="row">
-                                <div class="col-6 col-md-12">
-                                    <h3 class="mt-2 fs-2"> <i data-feather="cloud-rain"></i> <span id="humidity">0.00 %</span> </h3>
-                                </div>
-                                <div class="d-flex align-items-baseline mt-3">
-                                    <p class="text-primary">
-                                        <span id="humidity-status">Kondisi Aman</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-baseline">
-                                <h6 class="card-title mb-0">Level Asap</h6>
-                            </div>
-                            <div class="row">
-                                <div class="col-6 col-md-12">
-                                    <h3 class="mt-2 fs-2" > <i data-feather="wind"></i> <span id="smoke-level">0.00 ppm</span> </h3>
-                                </div>
-                                <div class="d-flex align-items-baseline mt-3">
-                                    <p class="text-primary">
-                                        <span id="smoke-level-status">Kondisi Aman</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-baseline">
-                                <h6 class="card-title mb-0">Gerakan</h6>
-                            </div>
-                            <div class="row">
-                                <div class="col-6 col-md-12">
-                                    <h3 class="mt-2 fs-2" > <i data-feather="activity"></i> <span id="motion">-</span> </h3>
-                                </div>
-                                <div class="d-flex align-items-baseline mt-3">
-                                    <p class="text-primary">
-                                        <span id="motion-status">Kondisi Aman</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <!-- Sensor Cards -->
+        @foreach (['Suhu' => 'thermometer', 'Kelembapan' => 'cloud-rain', 'Level Asap' => 'wind', 'Gerakan' => 'activity'] as $label => $icon)
+        <div class="col-md-3 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">{{ $label }}</h6>
+                    <h3 class="mt-2 fs-2"><i data-feather="{{ $icon }}"></i> <span id="{{ strtolower(str_replace(' ', '-', $label)) }}">0</span></h3>
+                    <p class="text-primary mt-3"><span id="{{ strtolower(str_replace(' ', '-', $label)) }}-status">-</span></p>
                 </div>
             </div>
-
         </div>
+        @endforeach
     </div>
+
     <div class="row">
+        <!-- Line Chart -->
         <div class="col-lg-12 col-xl-6 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
@@ -122,24 +48,26 @@
                 </div>
             </div>
         </div>
+        <!-- Time Series Table -->
         <div class="col-lg-12 col-xl-6 stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-baseline mb-2">
-                        <h6 class="card-title mb-0">Time Series</h6>
-                    </div>
+                    <h6 class="card-title">Time Series</h6>
                     <div class="table-responsive">
-                        <table class="table table-hover mb-0">
+                        <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th class="pt-0">#</th>
-                                    <th class="pt-0">Suhu</th>
-                                    <th class="pt-0">Kelembapan</th>
-                                    <th class="pt-0">Level Asap</th>
-                                    <th class="pt-0">Gerakan</th>
+                                    <th>#</th>
+                                    <th>Suhu</th>
+                                    <th>Kelembapan</th>
+                                    <th>Level Asap</th>
+                                    <th>Gerakan</th>
                                 </tr>
                             </thead>
                             <tbody id="tableBody">
+                                <tr>
+                                    <td colspan="5">No data available</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -149,87 +77,59 @@
     </div>
 </div>
 
-<!-- JavaScript for Fetching Data -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
-    const deviceId = "{{ $deviceId }}"; // Misalkan device_id adalah 1000000001
-    const endpointUrl = `https://simover-kominfo-default-rtdb.asia-southeast1.firebasedatabase.app/${deviceId}/sensors.json`;
+    const deviceId = "{{ $device->id }}";
+    const endpointUrl = `{{ url('/api/sensor-histories/data') }}?device_id=${deviceId}`;
+
+    function fetchSensorData() {
+        // Fetch sensor data for cards
+        fetch(`https://simover-kominfo-default-rtdb.asia-southeast1.firebasedatabase.app/${deviceId}/sensors.json`)
+            .then(response => response.json())
+            .then(data => updateSensorData(data))
+            .catch(error => console.error("Error fetching sensor data:", error));
+
+        // Fetch time series data
+        $.ajax({
+            url: endpointUrl,
+            method: 'GET',
+            success: function(data) {
+                let tableBody = '';
+                data.forEach((sensor, index) => {
+                    tableBody += `
+                        <tr>
+                            <td>${sensor.recorded_at || '-'}</td>
+                            <td>${sensor.temperature || '-'}°C</td>
+                            <td>${sensor.humidity || '-'}%</td>
+                            <td>${sensor.smoke || '-'} ppm</td>
+                            <td>${sensor.motion ? 'Terdeteksi' : 'Tidak Terdeteksi'}</td>
+                        </tr>
+                    `;
+                });
+                $('#tableBody').html(tableBody);
+            },
+            error: function(error) {
+                console.error("Error fetching time series data:", error);
+            }
+        });
+    }
+
+    function updateSensorData(data) {
+        // Update cards
+        $('#suhu').text(`${data.temperature || '0'} °C`);
+        $('#suhu-status').text(data.temperature > 30 ? 'Panas' : 'Aman');
+        $('#kelembapan').text(`${data.humidity || '0'} %`);
+        $('#kelembapan-status').text(data.humidity > 60 ? 'Lembap' : 'Aman');
+        $('#level-asap').text(`${data.smoke || '0'} ppm`);
+        $('#level-asap-status').text(data.smoke > 250 ? 'Berbahaya' : 'Aman');
+        $('#gerakan').text(data.motion ? 'Terdeteksi' : 'Tidak');
+        $('#gerakan-status').text(data.motion ? 'Ada gerakan' : 'Tidak ada gerakan');
+    }
 
     $(document).ready(function() {
-            function fetchSensorData() {
-                const urlWithDeviceId = `{{ url('/api/sensor-histories/data') }}?device_id=${deviceId}`;
-                $.ajax({
-                    url: urlWithDeviceId, // Sesuaikan dengan endpoint yang sesuai
-                    method: 'GET',
-                    success: function(data) {
-                        let tableBody = '';
-                        data.forEach(function(sensor) {
-                            tableBody += `
-                                <tr>
-                                    <td>${sensor.recorded_at ?? '-'}</td>
-                                    <td>${sensor.temperature ?? '-'}°C</td>
-                                    <td>${sensor.humidity ?? '-'}%</td>
-                                    <td>${sensor.smoke ?? '-'}ppm</td>
-                                    <td>${sensor.motion === 1 ? 'Terdeteksi' : 'Tidak Terdeteksi'}</td>
-                                </tr>
-                            `;
-                        });
-                        $('#tableBody').html(tableBody);
-                    },
-                    error: function(error) {
-                        console.log('Error fetching data:', error);
-                    }
-                });
-            }
-
-            // Fetch data saat halaman dimuat
-            fetchSensorData();
-
-            // Refresh data setiap 5 detik
-            setInterval(fetchSensorData, 5000);
-        });
-
-
-
-    console.log(endpointUrl);
-
-    function fetchData() {
-        fetch(endpointUrl)
-            .then(response => response.json()) // Mengambil data dalam format JSON
-            .then(data => {
-                updateSensorData(data); // Memperbarui data sensor di halaman
-            })
-            .catch(error => {
-                console.error("Error fetching data: ", error); // Menangani error jika ada masalah
-            });
-    }
-
-    // Fungsi untuk memperbarui tampilan data
-    function updateSensorData(data) {
-        // Update suhu
-        document.getElementById('temperature').textContent = `${data.temperature} °C`;
-        const temperatureStatus = data.temperature > 30 ? 'Kondisi Panas' : 'Kondisi Aman';
-        document.getElementById('temperature-status').textContent = temperatureStatus;
-
-        // Update kelembapan
-        document.getElementById('humidity').textContent = `${data.humidity} %`;
-        const humidityStatus = data.humidity > 60 ? 'Kondisi Lembap' : 'Kondisi Aman';
-        document.getElementById('humidity-status').textContent = humidityStatus;
-
-        // Update kualitas udara
-        document.getElementById('smoke-level').textContent = `${data.smoke} ppm`;
-        const airQualityStatus = data.smoke > 250 ? 'Kualitas Udara Buruk' : 'Kondisi Aman';
-        document.getElementById('smoke-level-status').textContent = airQualityStatus;
-
-        // Update gerakan
-        const motionStatus = data.motion ? 'Ada' : 'Tidak';
-        document.getElementById('motion').textContent = motionStatus;
-        document.getElementById('motion-status').textContent = motionStatus;
-    }
-
-    // Fetch data every 10 seconds (10000 ms)
-    setInterval(fetchData, 2000); // Update every 10 seconds
-    fetchData(); // Initial fetch when page loads
+        fetchSensorData();
+        setInterval(fetchSensorData, 5000); // Refresh every 5 seconds
+    });
 </script>
 
 @endsection

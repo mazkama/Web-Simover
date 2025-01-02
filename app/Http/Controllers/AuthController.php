@@ -51,10 +51,12 @@ class AuthController extends Controller
             // Kirim email verifikasi
             $this->firebaseAuth->sendEmailVerificationLink($user->email);
 
-            return response()->json([
-                'message' => 'User registered successfully. Please verify your email.',
-                'user' => $user,
-            ], 201);
+            // return response()->json([
+            //     'message' => 'User registered successfully. Please verify your email.',
+            //     'user' => $user,
+            // ], 201);
+
+            return redirect('/login')->with('status', 'You have been registered out successfully.');
         } catch (EmailExists $e) {
             return response()->json(['error' => 'Email already exists.'], 400);
         } catch (\Exception $e) {
@@ -75,40 +77,30 @@ class AuthController extends Controller
         ]);
 
         try {
-            // Mendapatkan data user berdasarkan email
             $user = $auth->getUserByEmail($request->email);
 
-            // Cek apakah email sudah diverifikasi
             if (!$user->emailVerified) {
-                return response()->json(['error' => 'Email not verified. Please verify your email first.'], 403);
+                return redirect('/login')->withErrors(['error' => 'Email not verified. Please verify your email first.']);
             }
 
-            // Proses login user dengan kredensial yang valid
             $login = $auth->signInWithEmailAndPassword(
                 $request->email,
                 $request->password
             );
 
-            // Simpan informasi pengguna ke session
             session([
                 'user_name' => $user->displayName,
                 'user_email' => $user->email,
-                'firebase_token' => $login->idToken() // Menyimpan token di session
+                'firebase_token' => $login->idToken()
             ]);
 
-            // return response()->json([
-            //     'message' => 'User logged in successfully!',
-            //     'data' => $login
-            // ], 200);
-
-            return redirect('/')->with('status', 'You have been logged out successfully.');
-
+            return redirect('/dashboard')->with('status', 'Login successful.');
         } catch (UserNotFound $e) {
-            return response()->json(['error' => 'User not found.'], 404);
+            return redirect('/login')->withErrors(['error' => 'User not found.']);
         } catch (InvalidPassword $e) {
-            return response()->json(['error' => 'Invalid credentials.'], 400);
+            return redirect('/login')->withErrors(['error' => 'Invalid credentials.']);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 400);
+            return redirect('/login')->withErrors(['error' => 'An error occurred.']);
         }
     }
 
@@ -132,7 +124,7 @@ class AuthController extends Controller
             // ], 200);
 
             // Redirect user to login page or another page
-           return redirect('/login')->with('status', 'You have been logged out successfully.');
+            return redirect('/login')->with('status', 'You have been logged out successfully.');
         } catch (Exception $e) {
             // Handle errors during logout
             return response()->json(['Error signing out' => $e->getMessage()], 400);
