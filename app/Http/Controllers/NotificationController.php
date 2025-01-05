@@ -29,6 +29,10 @@ class NotificationController extends Controller
             ->withNotification($notification)
             ->withData($data);
 
+            Log::info('Kirim Peringatan', [
+                'data' => $body,
+            ]);
+
         return $this->messaging->send($message);
     }
 

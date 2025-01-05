@@ -8,6 +8,7 @@ use App\Http\Controllers\NotificationController;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\DeviceController as ApiDeviceController;
+use App\Http\Controllers\DataController;
 
 Route::middleware(['guest'])->group(function () {
     // Authentication routes for login and registration
@@ -66,4 +67,6 @@ Route::prefix('api')->withoutMiddleware(VerifyCsrfToken::class)->group(function 
     Route::get('/sensor-histories/data', [SensorHistoryController::class, 'getData'])->name('dataSensor');
     # Route Api Devices
     Route::apiResource('devices', ApiDeviceController::class);
+
+    //Route::post('/data', [DataController::class, 'store']);
 });

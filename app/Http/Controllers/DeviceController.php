@@ -6,8 +6,6 @@ use App\Models\Device;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-use function PHPUnit\Framework\isEmpty;
-
 class DeviceController extends Controller
 {
     public function index()
@@ -24,45 +22,6 @@ class DeviceController extends Controller
     public function create()
     {
         return view('pages.devices.create');
-    }
-
-    // public function checkDeviceId(Request $request)
-    // {
-    //     $deviceId = $request->input('device_id');
-    //     $firebaseUrl = "https://simover-kominfo-default-rtdb.asia-southeast1.firebasedatabase.app/.json";
-
-    //     // Fetch data from Firebase
-    //     $response = Http::get($firebaseUrl);
-    //     $devices = $response->json();
-
-    //     // Check if the device ID exists in Firebase
-    //     if (isset($devices[$deviceId])) {
-    //         return response()->json(['exists' => true]);
-    //     }
-
-    //     return response()->json(['exists' => false]);
-    // }
-
-    public function checkDeviceId(Request $request)
-    {
-        $deviceId = $request->input('device_id');
-        $firebaseUrl = "https://simover-kominfo-default-rtdb.asia-southeast1.firebasedatabase.app/.json";
-
-        // Fetch data from Firebase
-        $response = Http::get($firebaseUrl);
-
-        if ($response->failed()) {
-            return response()->json(['exists' => false, 'message' => 'Failed to fetch data from Firebase'], 500);
-        }
-
-        $devices = $response->json();
-
-        // Check if the device ID exists in Firebase and not in MySQL
-        if (isset($devices[$deviceId]) && !Device::where('id', $deviceId)->exists()) {
-            return response()->json(['exists' => true]);
-        }
-
-        return response()->json(['exists' => false]);
     }
 
     public function store(Request $request)
@@ -160,7 +119,6 @@ class DeviceController extends Controller
         return redirect()->route('device.index')->with('success', 'Device updated successfully!');
     }
 
-
     public function delete($id)
     {
         $device = Device::find($id);
@@ -178,9 +136,49 @@ class DeviceController extends Controller
             // Redirect dengan pesan sukses
             return redirect()->route('device.index')->with('success', 'Perangkat berhasil dihapus!');
         } else {
-            
+
             // Redirect dengan pesan gagal
             return redirect()->route('device.index')->with('error', 'Gagal Menghapus perangkat!');
         }
     }
+
+    public function checkDeviceId(Request $request)
+    {
+        $deviceId = $request->input('device_id');
+        $firebaseUrl = "https://simover-kominfo-default-rtdb.asia-southeast1.firebasedatabase.app/.json";
+
+        // Fetch data from Firebase
+        $response = Http::get($firebaseUrl);
+
+        if ($response->failed()) {
+            return response()->json(['exists' => false, 'message' => 'Failed to fetch data from Firebase'], 500);
+        }
+
+        $devices = $response->json();
+
+        // Check if the device ID exists in Firebase and not in MySQL
+        if (isset($devices[$deviceId]) && !Device::where('id', $deviceId)->exists()) {
+            return response()->json(['exists' => true]);
+        }
+
+        return response()->json(['exists' => false]);
+    }
+
+    // public function checkDeviceId(Request $request)
+    // {
+    //     $deviceId = $request->input('device_id');
+    //     $firebaseUrl = "https://simover-kominfo-default-rtdb.asia-southeast1.firebasedatabase.app/.json";
+
+    //     // Fetch data from Firebase
+    //     $response = Http::get($firebaseUrl);
+    //     $devices = $response->json();
+
+    //     // Check if the device ID exists in Firebase
+    //     if (isset($devices[$deviceId])) {
+    //         return response()->json(['exists' => true]);
+    //     }
+
+    //     return response()->json(['exists' => false]);
+    // }
+
 }
