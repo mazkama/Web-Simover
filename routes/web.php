@@ -13,17 +13,11 @@ use App\Http\Controllers\DataController;
 Route::middleware(['guest'])->group(function () {
     // Authentication routes for login and registration
     Route::get('login', function () {
-        if (session('user_name'))
-            return redirect()->route('dashboard');
-        else
-            return view('auth.login');
+        return view('auth.login');
     })->name('login');
 
     Route::get('register', function () {
-        if (session('user_name'))
-            return redirect()->route('dashboard');
-        else
-            return view('auth.register');
+        return view('auth.register');
     })->name('register');
 
     // Firebase Authentication handling

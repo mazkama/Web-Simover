@@ -27,38 +27,40 @@ class FirebaseAuthMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-
-        // Periksa apakah token Firebase ada di session
         $firebaseToken = session('firebase_token');
-        // Log::info('Current route: ' . $request->path());
-        // Log::info('Firebase token: ' . $firebaseToken);
+        Log::info('Firebase token from session: ' . $firebaseToken); // Log token status
 
         if (!$firebaseToken) {
-            // Jika token tidak ditemukan, periksa apakah permintaan adalah AJAX
+            // Log that token is missing
+            Log::warning('Firebase token missing from session.');
+
+            // Periksa apakah permintaan adalah AJAX atau JSON
             if ($request->ajax() || $request->expectsJson()) {
-                return response()->json(['message' => 'Unauthorized'], 401);
+                return response()->json(['message' => 'Unauthorized: Token not found'], 401);
             }
 
-            // Untuk permintaan biasa, arahkan ke halaman login
+            // Arahkan ke halaman login untuk permintaan biasa
             return redirect()->route('login')->with('error', 'Session has expired. Please login again.');
         }
 
         try {
             // Verifikasi token menggunakan Firebase Auth
             $verifiedIdToken = $this->auth->verifyIdToken($firebaseToken);
+            Log::info('Verified Firebase token: ', (array) $verifiedIdToken);
 
-            // Tambahkan pengguna Firebase ke atribut permintaan
+            // Tambahkan informasi pengguna Firebase ke dalam request
             $request->attributes->add(['firebase_user' => $verifiedIdToken]);
         } catch (FailedToVerifyToken $e) {
-            // Token tidak valid atau kedaluwarsa
+            // Log kesalahan verifikasi token
+            Log::error('Firebase token verification failed: ' . $e->getMessage());
+
             if ($request->ajax() || $request->expectsJson()) {
-                return response()->json(['message' => 'Unauthorized'], 401);
+                return response()->json(['message' => 'Unauthorized: Token is invalid or expired'], 401);
             }
 
             return redirect()->route('login')->with('error', 'Invalid or expired session. Please login again.');
         }
 
-        // Lanjutkan permintaan
         return $next($request);
     }
 }

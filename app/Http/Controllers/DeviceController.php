@@ -74,7 +74,11 @@ class DeviceController extends Controller
         if ($response->successful()) {
             $thresholds = $response->json();
         } else {
-            return 'error bos firebase e';
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengambil data ke Firebase',
+                'errors' => $response->json(),
+            ], 500);
         }
 
         return view('pages.devices.edit', compact('device', 'thresholds'));
@@ -163,22 +167,4 @@ class DeviceController extends Controller
 
         return response()->json(['exists' => false]);
     }
-
-    // public function checkDeviceId(Request $request)
-    // {
-    //     $deviceId = $request->input('device_id');
-    //     $firebaseUrl = "https://simover-kominfo-default-rtdb.asia-southeast1.firebasedatabase.app/.json";
-
-    //     // Fetch data from Firebase
-    //     $response = Http::get($firebaseUrl);
-    //     $devices = $response->json();
-
-    //     // Check if the device ID exists in Firebase
-    //     if (isset($devices[$deviceId])) {
-    //         return response()->json(['exists' => true]);
-    //     }
-
-    //     return response()->json(['exists' => false]);
-    // }
-
 }

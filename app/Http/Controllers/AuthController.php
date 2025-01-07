@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Kreait\Firebase\Contract\Auth;
 use Kreait\Firebase\Factory;
@@ -28,6 +29,57 @@ class AuthController extends Controller
     /**
      * Register a new user with additional fields.
      */
+
+    // new register
+    // public function register(Request $request)
+    // {
+    //     $request->validate([
+    //         'name' => 'required|string|max:255',
+    //         'email' => 'required|email',
+    //         'phone' => 'required|string|min:10|max:15',
+    //         'password' => 'required|min:6',
+    //     ]);
+
+    //     try {
+    //         // Proses pendaftaran user baru di Firebase Authentication
+    //         $userProperties = [
+    //             'displayName' => $request->name,
+    //             'email' => $request->email,
+    //             'password' => $request->password,
+    //         ];
+
+    //         $user = $this->firebaseAuth->createUser($userProperties);
+
+    //         // Kirim email verifikasi
+    //         $this->firebaseAuth->sendEmailVerificationLink($user->email);
+
+    //         // Simpan data tambahan (name dan phone) ke Firestore
+    //         $firestore = (new Factory)
+    //             ->withServiceAccount(base_path('service-account-simover.json'))
+    //             ->createFirestore();
+
+    //         $database = $firestore->database();
+
+    //         $usersCollection = $database->collection('users');
+    //         $usersCollection->document($user->uid)->set([
+    //             'name' => $request->name,
+    //             'phone' => $request->phone,
+    //             'email' => $request->email,
+    //         ]);
+
+    //         // Redirect ke halaman login dengan pesan sukses
+    //         return redirect('/login')->with('status', 'Registration successful! Please verify your email.');
+    //     } catch (EmailExists $e) {
+    //         return redirect()->back()->withErrors(['email' => 'Email already exists.'])->withInput();
+    //     } catch (Exception $e) {
+    //         Log::info('Terjadi Kesalahan', [
+    //             'Error' => $e->getMessage(),
+    //         ]);
+    //         return redirect()->back()->withErrors(['error' => $e->getMessage()])->withInput();
+    //     }
+    // }
+
+    //register old
     public function register(Request $request)
     {
         $request->validate([

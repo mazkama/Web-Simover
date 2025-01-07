@@ -46,15 +46,17 @@
             </li>
             <br>
             <li class="nav-item">
-                <!-- Form Logout -->
-                <form action="{{ route('firebase.logout') }}" method="POST" style="display: inline;">
-                    @csrf
-                    <button type="submit" class="btn btn-link nav-link" style="padding: 0; text-decoration: none;">
-                        <i class="link-icon" data-feather="log-out"></i>
-                        <span class="link-title">Keluar</span>
-                    </button>
-                </form>
+                <!-- Link Logout -->
+                <a href="#" class="nav-link" style="padding: 0; text-decoration: none;" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <i class="link-icon" data-feather="log-out"></i>
+                    <span class="link-title">Keluar</span>
+                </a>
             </li>
+
+            <!-- Form Logout -->
+            <form id="logout-form" action="{{ route('firebase.logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
 
         </ul>
     </div>

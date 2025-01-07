@@ -50,7 +50,7 @@ return [
              *
              */
 
-            'credentials' => base_path('service-account-simover.json'),
+            'credentials' => env('FIREBASE_CREDENTIALS', base_path('service-account-simover.json')),
 
             /*
              * ------------------------------------------------------------------------

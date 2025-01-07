@@ -15,9 +15,7 @@ class CreateDevicesTable extends Migration
     {
         Schema::create('devices', function (Blueprint $table) {
             $table->bigIncrements('id')->primary(); // Menggunakan tipe data integer untuk ID
-            $table->string('device_name');
-            $table->string('location')->nullable(); 
-            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->string('device_name'); 
             $table->timestamps();
         });
     }

@@ -44,7 +44,7 @@
             <div class="card">
                 <div class="card-body">
                     <h6 class="card-title">Line Chart</h6>
-                    <div id="apexLine"></div>
+                    <div id="lineChart"></div>
                 </div>
             </div>
         </div>
@@ -82,6 +82,47 @@
     const deviceId = "{{ $device->id }}";
     const endpointUrl = `{{ url('/api/sensor-histories/data') }}?device_id=${deviceId}`;
 
+    let lineChart;
+
+    function initLineChart() {
+        const options = {
+            chart: {
+                type: 'line',
+                height: 350
+            },
+            series: [
+                { name: 'Suhu', data: [], color: '#ff3366' }, // Merah
+                { name: 'Kelembapan', data: [], color: '#6571ff' }, // Kuning
+                { name: 'Level Asap', data: [], color: '#fbbc06' }, // Ungu
+            ],
+            xaxis: {
+                type: 'datetime'
+            }
+        };
+
+        lineChart = new ApexCharts(document.querySelector("#lineChart"), options);
+        lineChart.render();
+    }
+
+    function updateLineChart(data) {
+        const suhuData = [];
+        const kelembapanData = [];
+        const levelAsapData = [];
+
+        data.forEach(sensor => {
+            const time = new Date(sensor.recorded_at).getTime();
+            suhuData.push([time, sensor.temperature]);
+            kelembapanData.push([time, sensor.humidity]);
+            levelAsapData.push([time, sensor.smoke]);
+        });
+
+        lineChart.updateSeries([
+            { name: 'Suhu', data: suhuData },
+            { name: 'Kelembapan', data: kelembapanData },
+            { name: 'Level Asap', data: levelAsapData },
+        ]);
+    }
+
     function fetchSensorData() {
         // Fetch sensor data for cards
         fetch(`https://simover-kominfo-default-rtdb.asia-southeast1.firebasedatabase.app/${deviceId}/sensors.json`)
@@ -107,6 +148,7 @@
                     `;
                 });
                 $('#tableBody').html(tableBody);
+                updateLineChart(data);
             },
             error: function(error) {
                 console.error("Error fetching time series data:", error);
@@ -127,6 +169,7 @@
     }
 
     $(document).ready(function() {
+        initLineChart();
         fetchSensorData();
         setInterval(fetchSensorData, 5000); // Refresh every 5 seconds
     });
